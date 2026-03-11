@@ -26,5 +26,5 @@ Dalam struktur ini, data diatur dengan prinsip **LIFO (Last In, First Out)**. El
 🎥 Video Demo
 Daftar operasi (Insert, Delete, & Display dengan Delay) menggunakan Circular Doubly Linked List:
 
-**[Nonton Video Demo](link-disini)**
+**[Nonton Video Demo](https://youtu.be/Z4ZfItcZlNU?si=sWllzG78Ms3OmILL)**
 *Klik gambar di atas untuk memutar video demo di YouTube @Muhammad Apzirza Rafi.*
