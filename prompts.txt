@@ -1,0 +1,12 @@
+Tools AI yang digunakan> Google Gemini AI
+
+sekarang kita ngoding struktur data menggunakan prinsip stack 
+penjelasan detail sebagai berikut: 
+
+Buatlah program Java untuk mengevaluasi sebuah ekspresi aritmatika dengan menggunakan struktur data Stack (boleh Array/Linked List), dengan ketentuan sebagai berikut:
+
+1. Input merupakan sebuah ekspresi aritmatika (infix)
+2. Output meliputi:
+postfix expression, 
+step by step perhitungan (berdasarkan proses push-pop stack), dan
+hasil akhir perifungal
