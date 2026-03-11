@@ -1,5 +1,7 @@
 Tools AI yang digunakan> Google Gemini AI
 
+---------PROMPTS 1-------------
+
 sekarang kita ngoding struktur data menggunakan prinsip stack 
 penjelasan detail sebagai berikut: 
 
@@ -9,4 +11,8 @@ Buatlah program Java untuk mengevaluasi sebuah ekspresi aritmatika dengan menggu
 2. Output meliputi:
 postfix expression, 
 step by step perhitungan (berdasarkan proses push-pop stack), dan
-hasil akhir perifungal
+hasil akhir perhitungan
+
+>>> Output yang keluar berupa kode hasil yang akan di salin ke vs code 
+
+---------PROMPTS 2 dan selanjutnya itu tinggal menyesuaikan dan improvisasi agar kode lebih rapi dan enak dilihat-------------
