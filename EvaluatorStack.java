@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class EvaluatorStack {
 
-    // 1. Fungsi untuk menentukan tingkat kekuatan (presedensi) operator
+    // 1. Fungsi Presedensi Operator
     static int getPresedensi(char ch) {
         if (ch == '+' || ch == '-') return 1;
         if (ch == '*' || ch == '/') return 2;
@@ -11,79 +11,77 @@ public class EvaluatorStack {
         return -1;
     }
 
-    // 2. Fungsi Konversi Infix ke Postfix
+    // 2. Konversi Infix ke Postfix (Mendukung Multi-digit dengan spasi sebagai pemisah)
     static String infixKePostfix(String infix) {
         StringBuilder postfix = new StringBuilder();
         Stack<Character> stack = new Stack<>();
 
-        System.out.println("\n>>> PROSES KONVERSI INFIX KE POSTFIX <<<");
-        System.out.printf("%-15s | %-15s | %-15s\n", "Karakter", "Stack", "Postfix");
-        System.out.println("---------------------------------------------------------");
-
         for (int i = 0; i < infix.length(); i++) {
             char c = infix.charAt(i);
 
-            // Jika angka, langsung masukkan ke hasil postfix
-            if (Character.isLetterOrDigit(c)) {
-                postfix.append(c);
+            // Jika angka, baca terus sampai angka tersebut habis (multi-digit)
+            if (Character.isDigit(c)) {
+                while (i < infix.length() && Character.isDigit(infix.charAt(i))) {
+                    postfix.append(infix.charAt(i));
+                    i++;
+                }
+                postfix.append(" "); // Beri spasi agar angka tidak nempel
+                i--; // Kembalikan index
             } 
-            // Jika kurung buka, push ke stack
             else if (c == '(') {
                 stack.push(c);
             } 
-            // Jika kurung tutup, pop semua sampai ketemu kurung buka
             else if (c == ')') {
                 while (!stack.isEmpty() && stack.peek() != '(') {
-                    postfix.append(stack.pop());
+                    postfix.append(stack.pop()).append(" ");
                 }
-                stack.pop(); // buang '('
+                stack.pop();
             } 
-            // Jika operator
-            else {
+            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
                 while (!stack.isEmpty() && getPresedensi(c) <= getPresedensi(stack.peek())) {
-                    postfix.append(stack.pop());
+                    postfix.append(stack.pop()).append(" ");
                 }
                 stack.push(c);
             }
-            // Tampilkan step per step konversi
-            System.out.printf("%-15s | %-15s | %-15s\n", c, stack.toString(), postfix.toString());
         }
 
-        // Pop sisa operator di stack
         while (!stack.isEmpty()) {
-            postfix.append(stack.pop());
+            postfix.append(stack.pop()).append(" ");
         }
-        return postfix.toString();
+        return postfix.toString().trim();
     }
 
-    // 3. Fungsi Evaluasi (Perhitungan) Postfix
+    // 3. Evaluasi Postfix (Mendukung Angka Multi-digit)
     static int hitungPostfix(String postfix) {
         Stack<Integer> stack = new Stack<>();
+        String[] tokens = postfix.split(" "); // Pecah berdasarkan spasi
+
         System.out.println("\n>>> STEP-BY-STEP PERHITUNGAN (EVALUASI) <<<");
 
-        for (int i = 0; i < postfix.length(); i++) {
-            char c = postfix.charAt(i);
+        for (String s : tokens) {
+            if (s.isEmpty()) continue;
 
-            // Jika karakter adalah angka
-            if (Character.isDigit(c)) {
-                int angka = c - '0'; // Ubah char ke int
+            // Jika token adalah angka (bisa multi-digit)
+            if (Character.isDigit(s.charAt(0))) {
+                int angka = Integer.parseInt(s);
                 stack.push(angka);
                 System.out.println("Action: Push " + angka + " \t| Stack: " + stack);
             } 
-            // Jika karakter adalah operator
+            // Jika token adalah operator
             else {
                 int angka2 = stack.pop();
                 int angka1 = stack.pop();
                 int hasilTemp = 0;
+                char op = s.charAt(0);
 
-                switch (c) {
+                switch (op) {
                     case '+': hasilTemp = angka1 + angka2; break;
                     case '-': hasilTemp = angka1 - angka2; break;
                     case '*': hasilTemp = angka1 * angka2; break;
                     case '/': hasilTemp = angka1 / angka2; break;
                 }
                 stack.push(hasilTemp);
-                System.out.println("Action: " + angka1 + " " + c + " " + angka2 + " \t| Stack: " + stack + " (Hasil: " + hasilTemp + ")");
+                System.out.println("Action: " + angka1 + " " + op + " " + angka2 + " \t| Stack: " + stack + " (Hasil: " + hasilTemp + ")");
             }
         }
         return stack.pop();
@@ -91,24 +89,15 @@ public class EvaluatorStack {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-
-        System.out.println("=== PROGRAM EVALUATOR EKSPRESI STACK ===");
-        System.out.print("Masukkan Ekspresi Infix (Tanpa Spasi, contoh 2+3*4): ");
+        System.out.println("=== PROGRAM EVALUATOR EKSPRESI STACK (FIXED) ===");
+        System.out.print("Masukkan Ekspresi Infix (contoh 2+2*2): ");
         String ekspresiInfix = input.nextLine();
 
-        // Langkah 1: Infix ke Postfix
         String hasilPostfix = infixKePostfix(ekspresiInfix);
-        System.out.println("\n---------------------------------------------------------");
-        System.out.println("FINAL POSTFIX EXPRESSION: " + hasilPostfix);
-        System.out.println("---------------------------------------------------------");
+        System.out.println("\nPOSTFIX: " + hasilPostfix);
 
-        // Langkah 2: Hitung Hasil Akhir
         int hasilAkhir = hitungPostfix(hasilPostfix);
-
-        System.out.println("\n========================================");
-        System.out.println("HASIL AKHIR PERHITUNGAN: " + hasilAkhir);
-        System.out.println("========================================");
-
+        System.out.println("\nHASIL AKHIR: " + hasilAkhir); // Hasilnya akan jadi 32
         input.close();
     }
 }
